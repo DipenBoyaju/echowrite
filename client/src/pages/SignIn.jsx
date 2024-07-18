@@ -1,10 +1,45 @@
-import { Button, Label, TextInput } from "flowbite-react"
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react"
 import { Link } from "react-router-dom"
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'
+import { useState } from "react";
 
 const SignIn = () => {
   const nav = useNavigate()
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.email || !formData.password) {
+      return setErrorMessage('Please fill out all fields')
+    }
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        setLoading(false);
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+
+      nav('/')
+    } catch (error) {
+      setErrorMessage(error.message)
+      setLoading(false);
+    }
+  }
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -23,23 +58,38 @@ const SignIn = () => {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-          <form action="" className="flex flex-col gap-3">
+          <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
             <div className="space-y-1">
               <Label value="Email" className="text-md font-semibold" />
-              <TextInput type="email" placeholder="email@mail.com" id="email" />
+              <TextInput type="email" placeholder="email@mail.com" id="email" onChange={handleChange} />
             </div>
             <div className="space-y-1">
               <Label value="Password" className="text-md font-semibold" />
-              <TextInput type="password" placeholder="********" id="password" />
+              <TextInput type="password" placeholder="********" id="password" onChange={handleChange} />
             </div>
-            <Button type="submit" gradientDuoTone='pinkToOrange' className="text-white font-semibold" size='lg'>Sign Up</Button>
+            <Button type="submit" gradientDuoTone='pinkToOrange' className="text-white font-semibold" size='lg' disabled={loading}>
+              {
+                loading ? (
+                  <>
+                    <Spinner size='sm' />
+                    <span className="pl-3">Loading ...</span>
+                  </>
+                ) :
+                  'Sign In'
+              }
+            </Button>
           </form>
           <div className="">
-            <p>Already have an Account <span className="cursor-pointer text-pink-500 font-semibold" onClick={() => nav('/signup')}>Sign up</span></p>
+            <p>Dont Have an Account <span className="cursor-pointer text-pink-500 font-semibold" onClick={() => nav('/signup')}>Sign Up</span></p>
           </div>
+          {
+            errorMessage && (
+              <Alert className="mt-5" color='failure'>{errorMessage}</Alert>
+            )
+          }
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 export default SignIn

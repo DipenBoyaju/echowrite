@@ -40,8 +40,7 @@ const SignUp = () => {
       setLoading(false);
     }
   }
-  console.log('formData :', formData);
-  console.log('formData :', formData.username);
+
   return (
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
@@ -86,7 +85,7 @@ const SignUp = () => {
             </Button>
           </form>
           <div className="">
-            <p>Have an Account <span className="cursor-pointer text-pink-500 font-semibold" onClick={() => nav('/signin')}>Sign In</span></p>
+            <p>Already Have an Account <span className="cursor-pointer text-pink-500 font-semibold" onClick={() => nav('/signin')}>Sign In</span></p>
           </div>
           {
             errorMessage && (
