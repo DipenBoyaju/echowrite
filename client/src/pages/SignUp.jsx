@@ -35,6 +35,7 @@ const SignUp = () => {
       setLoading(false);
 
       nav('/signin')
+
     } catch (error) {
       setErrorMessage(error.message)
       setLoading(false);
