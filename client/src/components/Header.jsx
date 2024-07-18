@@ -16,8 +16,8 @@ const Header = () => {
       <Button className="w-12 h-10 lg:hidden" color='gray' pill><AiOutlineSearch className="text-lg" /></Button>
       <div className="flex gap-2 md:order-2">
         <Button className="w-12 h-10 hidden lg:inline " color='gray' pill><FaMoon /></Button>
-        <Link to=''>
-          <Button outline gradientDuoTone='purpleToBlue'>
+        <Link to='/signup'>
+          <Button outline gradientDuoTone='purpleToBlue' className="focus:outline-none">
             Sign In
           </Button>
         </Link>
