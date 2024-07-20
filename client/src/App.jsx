@@ -8,6 +8,7 @@ import SignIn from "./pages/SignIn"
 import FooterCon from "./components/Footer"
 import ScrollToTop from "./components/ScrollToTop"
 import Dashboard from "./admin/Dashboard"
+import PrivateRoute from "./components/PrivateRoute"
 
 const App = () => {
   return (
@@ -21,7 +22,9 @@ const App = () => {
         <Route path="/projects" element={<Projects />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
       <FooterCon />
     </BrowserRouter>
